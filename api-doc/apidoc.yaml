@@ -89,3 +89,31 @@ paths:
           description: Bad request, invalid or missing parameters
         '500':
           description: Internal server error
+  /train/trainmodel:
+    post:
+      summary: Endpoint to train a model 
+      description: |
+        Endpoint to train a model
+      parameters:
+      - in: query
+        name: project_name
+        schema:
+          type: string
+        description: The name of the project that the user wants to train their model for.
+      - in: query
+        name: epochs
+        schema:
+          type: integer
+        description: The amount of iterations of training the user wants to perform.
+      - in: query
+        name: model_type
+        schema:
+          type: string
+        description: The type of model that the user wants to train (nearest neighbors, closest neighbor, cnn)
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request, invalid or missing parameters
+        '500':
+          description: Internal server error
