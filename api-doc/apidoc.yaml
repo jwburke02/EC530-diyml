@@ -1,0 +1,91 @@
+openapi: 3.0.0
+info:
+  title: File Upload API
+  version: 1.0.0
+  description: |
+    This API allows users to upload a list of image files and a list of text files.
+
+paths:
+  /imagelabel/upload:
+    post:
+      summary: Upload image and label data to a new project
+      description: |
+        Endpoint for uploading a list of image files and text files to a project that does not yet exist given the current authenticated user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_name:
+                  type: string
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: List of encoded image files to upload
+                texts:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: List of encoded text files to upload
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request body, invalid or missing parameters
+        '500':
+          description: Internal server error
+    put:
+      summary: Upload image and label data to a pre-existing project
+      description: |
+        Endpoint for uploading a list of image files and text files to a project that does exist given the current authenticated user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_name:
+                  type: string
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: List of encoded image files to upload
+                texts:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: List of encoded text files to upload
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request body, invalid or missing parameters
+        '500':
+          description: Internal server error
+  /imagelabel/delete:
+    delete:
+      summary: Delete image and label data from an existing project
+      description: |
+        Endpoint to delete image and label data from a current project
+      parameters:
+      - in: query
+        name: project_name
+        schema:
+          type: string
+        description: The project name for which the user wants to delete the image and label data
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request, invalid or missing parameters
+        '500':
+          description: Internal server error
