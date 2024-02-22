@@ -1,0 +1,161 @@
+openapi: 3.0.3
+info:
+  title: DIYML
+  description: This is an API for creating, training, and using ML image detection models.
+  version: 1.0.0
+paths:
+  /upload/project:
+    post:
+      tags:
+        - Project
+      summary: Create a new project.
+      description: Create a new project.
+      operationId: createProject
+      requestBody:
+        description: Create a new project for a user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+        required: true
+      responses:
+        '200':
+          description: Successful creation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Invalid ID/parameters supplied.
+    put:
+      tags:
+        - Project
+      summary: Update a project object.
+      description: Update a project object.
+      operationId: updateProject
+      requestBody:
+        description: Update a project for a user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        '200':
+          description: Successful update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Invalid ID/parameters supplied.
+  /upload/project/{projectId}:
+    get:
+      tags:
+        - Project
+      summary: Retrieve a project object.
+      description: Retrieve a project object.
+      operationId: retrieveProject
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project to return information for.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 124122
+      responses:
+        '200':
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '404':
+          description: Unable to locate project with supplied ID.
+    delete:
+      tags:
+        - Project
+      summary: Delete a project object.
+      description: Delete a project object.
+      operationId: deleteProject
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project to return information for.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 124122
+      responses:
+        '200':
+          description: Successful deletion
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Deletion successful.
+        '404':
+          description: Unable to locate project with supplied ID.
+    /upload/data_point:
+      post:
+      put:
+    /upload/data_point/{data_id}:
+      get:
+      delete:
+    /upload/data_point/{project_id}:
+      get:
+      delete:
+    /upload/class_info:
+      post:
+      put:
+    /upload/class_info/{project_id}:
+      get:
+      delete:
+    /train/training:
+      post:
+        tags:
+        - Training
+        summary: Train a model given a project.
+        description: Train a project.
+        operationId: trainModel
+        requestBody:
+          description: Train a new model.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainRequest'
+          required: true
+        responses:
+          '200':
+            description: Successful training
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/TrainResults'
+          '400':
+            description: Invalid ID/parameters supplied.
+
+components:
+  schemas:
+    Project:
+      type: object
+      properties:
+        project_id:
+          type: integer
+          format: int64
+          example: 124122
+        owner_id:
+          type: integer
+          format: int64
+          example: 7268763
+        project_name:
+          type: string
+          example: MyProject
+        classification_type:
+          type: string
+          example: classification
+          enum:
+            - classification
+            - detection
