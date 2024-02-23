@@ -34,14 +34,7 @@ class FormatAuthReturn(object):
         self.api_token = api_token
         self.error_string = error_string
 
-userpassParse = reqparse.RequestParser()
-userpassParse.add_argument('username', help="Username cannot be blank...")
-userpassParse.add_argument('password', help="Password cannot be blank...")
-userpasstokenParse = reqparse.RequestParser()
-userpasstokenParse.add_argument('username', help="Username cannot be blank...")
-userpasstokenParse.add_argument('password', help="Password cannot be blank...")
-userpasstokenParse.add_argument('uid', help="Must provide a valid uid...")
-userpasstokenParse.add_argument('api_token', help="Must provide a valid api_token...")
+parser = reqparse.RequestParser().add_argument('username', help="Username cannot be blank...").add_argument('password', help="Password cannot be blank...").add_argument('uid', help="Must provide a valid uid...").add_argument('api_token', help="Must provide a valid api_token...")
 
 def generateUID():
     min = 1
@@ -55,7 +48,7 @@ class AuthenticationAPI(Resource):
     @marshal_with(auth_return)
     def get(self):
         try:
-            args = userpassParse.parse_args()
+            args = parser.parse_args()
             hashed_pass = hashlib.md5(args['password'].encode('UTF-8')).hexdigest()
             result = user.query.filter_by(username=args['username'], hashed_pass=hashed_pass).first()
             if (result):
@@ -67,7 +60,7 @@ class AuthenticationAPI(Resource):
     @marshal_with(auth_return)
     def put(self):
         try:
-            args = userpassParse.parse_args()
+            args = parser.parse_args()
             if user.query.filter_by(username=args['username']).limit(1).first() is not None:
                 return FormatAuthReturn(-1, "Error", "Error", "Username taken.")
             hashed_pass = hashlib.md5(args['password'].encode('UTF-8')).hexdigest()
@@ -82,7 +75,7 @@ class AuthenticationAPI(Resource):
             return FormatAuthReturn(-1, "Error", "Error", e)
     def delete(self):
         try:
-            args = userpasstokenParse.parse_args()
+            args = parser.parse_args()
             result = user.query.filter_by(id=args['uid'], username=args['username'], hashed_pass=hashlib.md5(args['password'].encode('UTF-8')).hexdigest(), api_token=args['api_token']).first()
             if (result):
                 db.session.delete(result)
