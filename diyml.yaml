@@ -48,7 +48,7 @@ paths:
                 $ref: '#/components/schemas/Project'
         '400':
           description: Invalid ID/parameters supplied.
-  /upload/project/{projectId}:
+  /upload/project/{project_id}:
     get:
       tags:
         - Project
@@ -56,7 +56,7 @@ paths:
       description: Retrieve a project object.
       operationId: retrieveProject
       parameters:
-        - name: projectId
+        - name: project_id
           in: path
           description: ID of project to return information for.
           required: true
@@ -80,9 +80,9 @@ paths:
       description: Delete a project object.
       operationId: deleteProject
       parameters:
-        - name: projectId
+        - name: project_id
           in: path
-          description: ID of project to return information for.
+          description: ID of project to delete.
           required: true
           schema:
             type: integer
@@ -98,44 +98,273 @@ paths:
                 example: Deletion successful.
         '404':
           description: Unable to locate project with supplied ID.
-    /upload/data_point:
-      post:
-      put:
-    /upload/data_point/{data_id}:
-      get:
-      delete:
-    /upload/data_point/{project_id}:
-      get:
-      delete:
-    /upload/class_info:
-      post:
-      put:
-    /upload/class_info/{project_id}:
-      get:
-      delete:
-    /train/training:
-      post:
-        tags:
-        - Training
-        summary: Train a model given a project.
-        description: Train a project.
-        operationId: trainModel
-        requestBody:
-          description: Train a new model.
+  /upload/data_point:
+    post:
+      tags:
+        - Data
+      summary: Upload a new data point to a project.
+      description: Upload a new data point.
+      operationId: createDataPoint
+      requestBody:
+        description: Upload a data point.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataPoint'
+        required: true
+      responses:
+        '200':
+          description: Successful creation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TrainRequest'
+                $ref: '#/components/schemas/DataPoint'
+        '400':
+          description: Invalid ID/parameters supplied.
+    put:
+      tags:
+        - Data
+      summary: Upload/overwrite data point to a project.
+      description: Upload/overwrite a new data point.
+      operationId: updateDataPoint
+      requestBody:
+        description: Upload/overwrite a data point.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataPoint'
+        required: true
+      responses:
+        '200':
+          description: Successful creation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataPoint'
+        '400':
+          description: Invalid ID/parameters supplied.
+  /upload/data_point/{data_id}:
+    get:
+      tags:
+        - Data
+      summary: Retrieve a data point object.
+      description: Retrieve a data point object.
+      operationId: retrieveDataPoint
+      parameters:
+        - name: data_id
+          in: path
+          description: ID of data_point to return information for.
           required: true
-        responses:
-          '200':
-            description: Successful training
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/TrainResults'
-          '400':
-            description: Invalid ID/parameters supplied.
+          schema:
+            type: integer
+            format: int64
+            example: 124122
+      responses:
+        '200':
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataPoint'
+        '404':
+          description: Unable to locate data point with supplied ID.
+    delete:
+      tags:
+        - Data
+      summary: Delete a data point object.
+      description: Delete a data point object.
+      operationId: deleteDataPoint
+      parameters:
+        - name: data_id
+          in: path
+          description: ID of data point to delete.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 124122
+      responses:
+        '200':
+          description: Successful deletion
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Deletion successful.
+        '404':
+          description: Unable to locate data point with supplied ID.
+  /upload/data_point/{project_id}:
+    get:
+      tags:
+        - Data
+      summary: Retrieve all data points for a project
+      description: Retrieve all data points for a project.
+      operationId: retrieveDataPoints
+      parameters:
+        - name: project_id
+          in: path
+          description: ID of project to return data points for.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 124122
+      responses:
+        '200':
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataPoint'
+        '404':
+          description: Unable to locate data points with supplied project ID.
+    delete:
+      tags:
+        - Data
+      summary: Delete all data for a project.
+      description: Delete all data point objects.
+      operationId: deleteDataPoints
+      parameters:
+        - name: project_id
+          in: path
+          description: ID of project with data points to delete.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 124122
+      responses:
+        '200':
+          description: Successful deletion
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Deletion successful.
+        '404':
+          description: Unable to locate data point with supplied ID.
+  /upload/class_info:
+    post:
+      tags:
+        - Class
+      summary: Upload new class information to the project.
+      description: Upload a new class set.
+      operationId: createClassInfo
+      requestBody:
+        description: Upload a class set.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassInfo'
+        required: true
+      responses:
+        '200':
+          description: Successful creation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassInfo'
+        '400':
+          description: Invalid ID/parameters supplied.
+    put:
+      tags:
+        - Class
+      summary: Upload/overwrite class information to a project.
+      description: Upload/overwrite a new class information to a project.
+      operationId: updateClassInfo
+      requestBody:
+        description: Upload/overwrite a class set.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassInfo'
+        required: true
+      responses:
+        '200':
+          description: Successful creation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassInfo'
+        '400':
+          description: Invalid ID/parameters supplied.
+  /upload/class_info/{project_id}:
+    get:
+      tags:
+        - Class
+      summary: Retrieve class info for a project
+      description: Retrieve class info for a project.
+      operationId: retrieveClassInfo
+      parameters:
+        - name: project_id
+          in: path
+          description: ID of project to return ClassInfo for.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 124122
+      responses:
+        '200':
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClassInfo'
+        '404':
+          description: Unable to locate ClassInfo with supplied project ID.
+    delete:
+      tags:
+        - Class
+      summary: Delete all ClassInfo for a project.
+      description: Delete all ClassInfo for a project.
+      operationId: deleteClassInfo
+      parameters:
+        - name: project_id
+          in: path
+          description: ID of project with ClassInfo to delete.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 124122
+      responses:
+        '200':
+          description: Successful deletion
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Deletion successful.
+        '404':
+          description: Unable to locate ClassInfo with supplied ID.
+  /train/training:
+    post:
+      tags:
+      - Training
+      summary: Train a model given a project.
+      description: Train a project.
+      operationId: trainModel
+      requestBody:
+        description: Train a new model.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful training
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainResults'
+        '400':
+          description: Invalid ID/parameters supplied.
 
 components:
   schemas:
@@ -159,3 +388,65 @@ components:
           enum:
             - classification
             - detection
+    ClassInfo:
+      type: object
+      properties:
+        classes:
+          type: array
+          items: 
+            type: string
+            example: class1
+        project_id:
+          type: integer
+          format: int64
+          example: 124122
+    DataPoint:
+      type: object
+      properties:
+        project_id:
+          type: integer
+          format: int64
+          example: 124122
+        name:
+          type: string
+          example: image one
+        image_data:
+          type: string
+          example: asdkuahsgdkjfhg17271294876qweoifuhaoisudf98761239asu1982769876298gasdiuy987698769876aseuifygauisdygfiuas9769876iufygqwieuyfgkajsdygfkuawyger
+        label_data:
+          type: string
+          example: 0, 0.45 0.23 0.14 0.14
+    TrainRequest:
+      type: object
+      properties:
+        project_id:
+          type: integer
+          format: int64
+          example: 124122
+        epochs:
+          type: integer
+          format: int32
+          example: 125
+        train_split:
+          type: number
+          format: float
+          example: 0.80
+        model_name:
+          type: string
+          example: MyModel
+    TrainResults:
+      type: object
+      properties:
+        project_id:
+          type: integer
+          format: int63
+          example: 124122
+        model_name:
+          type: string
+          example: MyModel
+        train_loss:
+          type: number
+          format: float
+          example: 1.241
+        model_url:
+          type: string
