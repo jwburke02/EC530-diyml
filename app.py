@@ -81,18 +81,6 @@ class AuthenticationAPI(Resource):
         except Exception as e:
             print(e)
     @marshal_with(user_definition)
-    def post(self):
-        try:
-            args = userpasstokenParse.parse_args()
-            hashed_pass = hashlib.md5(args['password'].encode('UTF-8')).hexdigest()
-            new_user = user(args['uid'], args['username'], hashed_pass, args['api_token'])
-            db.session.add(new_user)
-            db.session.commit()
-            return FormatUser(args['uid'], args['username'], args['api_token'])
-        except Exception as e:
-            print(e)
-            return e
-    @marshal_with(user_definition)
     def put(self):
         try:
             args = userpassParse.parse_args()
