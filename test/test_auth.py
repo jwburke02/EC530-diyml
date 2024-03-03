@@ -1,5 +1,8 @@
 import pytest
 from flask.testing import FlaskClient
+import sys
+
+sys.path.append("../")
 from app import app
 
 @pytest.fixture
