@@ -1,10 +1,17 @@
-def train_model(auth_token, project_name, epochs, train_split):
-    if auth_token is None or not isinstance(auth_token, str):
-        return "[Error] Invalid token", 422
-    if project_name is None or not isinstance(project_name, str):
-        return "[Error] Invalid parameter - project_name", 422
-    if epochs is None or epochs < 1 or epochs > 250:
-        return "[Error] Invalid parameter - epochs", 422
-    if train_split is None or train_split < 0.1 or train_split > 1.0:
-        return "[Error] Invalid parameter - train_split (between 0 and 1)", 422
-    return "Success", 200
+from flask_restful import Resource, reqparse
+
+class TrainAPI(Resource):
+    def put(self):
+        try:
+            parser = reqparse.RequestParser().add_argument('api_token', help="API Token cannot be blank...", required=True).add_argument('project_name', help="Project Name cannot be blank...", required=True).add_argument('train_split', required=True).add_argument('epochs', required=True)
+            args = parser.parse_args()
+            result = {
+                "Status": "Model is trained...",
+                "TrainResults": "Example results"
+            }
+            if (result):
+                return result, 200
+            else:
+                return {'Error' : 'no such project found'}, 404
+        except:
+            return "There was some issue with your request", 400

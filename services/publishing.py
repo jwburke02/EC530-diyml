@@ -1,8 +1,16 @@
-def publish_model(auth_token, project_name, model_name):
-    if auth_token is None or not isinstance(auth_token, str):
-        return "[Error] Invalid token", 422
-    if project_name is None or not isinstance(project_name, str):
-        return "[Error] Invalid parameter - project_name", 422
-    if model_name is None or not isinstance(model_name, str):
-        return "[Error] Invalid parameter - model_name", 422
-    return "Success", 200
+from flask_restful import Resource, reqparse
+
+class PublishAPI(Resource):
+    def put(self):
+        try:
+            parser = reqparse.RequestParser().add_argument('api_token', help="API Token cannot be blank...", required=True).add_argument('project_name', help="Project Name cannot be blank...", required=True)
+            args = parser.parse_args()
+            result = {
+                "Status": "Published model..."
+            }
+            if (result):
+                return result, 200
+            else:
+                return {'Error' : 'no such project found'}, 404
+        except:
+            return "There was some issue with your request", 400

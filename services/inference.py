@@ -1,8 +1,17 @@
-def infer(auth_token, model_name, image_data):
-    if auth_token is None or not isinstance(auth_token, str):
-        return "[Error] Invalid token", 422
-    if model_name is None or not isinstance(model_name, str):
-        return "[Error] Invalid parameter - model_name", 422
-    if image_data is None or not isinstance(image_data, list):
-        return "[Error] Invalid parameter - image_data", 422
-    return "Success", 200
+from flask_restful import Resource, reqparse
+
+class InferenceAPI(Resource):
+    def get(self):
+        try:
+            parser = reqparse.RequestParser().add_argument('api_token', help="API Token cannot be blank...", required=True).add_argument('project_name', help="Project Name cannot be blank...", required=True).add_argument('image_data', required=True)
+            args = parser.parse_args()
+            result = {
+                "DetectionResults": "Example results",
+                "project_name": args['project_name']
+            }
+            if (result):
+                return result, 200
+            else:
+                return {'Error' : 'no such project found'}, 404
+        except:
+            return "There was some issue with your request", 400
