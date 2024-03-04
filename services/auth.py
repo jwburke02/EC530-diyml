@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse
 
 class AuthenticationAPI(Resource):
-    def get(self):
+    def post(self):
         try:
             parser = reqparse.RequestParser().add_argument('username', help="Username cannot be blank...", required=True).add_argument('password', help="Password cannot be blank...", required=True)
             args = parser.parse_args()
@@ -26,7 +26,7 @@ class AuthenticationAPI(Resource):
             return result, 200
         except Exception as e:
             return "There was some issue with your request", 400
-    def delete(self):
+    def patch(self):
         try:
             parser = reqparse.RequestParser().add_argument('username', help="Username cannot be blank...", required=True).add_argument('password', help="Password cannot be blank...", required=True).add_argument('api_token', help="API token cannot be blank...", required=True)
             args = parser.parse_args()
