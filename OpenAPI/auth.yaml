@@ -1,0 +1,101 @@
+openapi: 3.0.3
+info:
+  title: DIYML - Auth API
+  description: These are the endpoints for the DIYML project which have to do with Authentication and Authorization; that is, creating, signing into, and deleting accounts from the API.
+  version: 1.0.0
+paths:
+  /auth:
+    post:
+      tags:
+        - Account
+      summary: Log into a user account.
+      description: Log into a user account.
+      operationId: login
+      requestBody:
+        description: Log into a user account.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+        required: true
+      responses:
+        '200':
+          description: Successful login.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountWithAPI'
+        '400':
+          description: Invalid parameters supplied.
+        '404':
+          description: Could not locate Account.
+    put:
+      tags:
+        - Account
+      summary: Create a user account.
+      description: Create a user account.
+      operationId: createAccount
+      requestBody:
+        description: Create a user account.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '200':
+          description: Successful account creation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountWithAPI'
+        '400':
+          description: Invalid ID/parameters supplied.
+    patch:
+      tags:
+        - Account
+      summary: Delete an account.
+      description: Delete an account
+      operationId: deleteAccount
+      requestBody:
+        description: Delete a user account.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountWithAPI'
+      responses:
+        '200':
+          description: Successful account deletion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountWithAPI'
+        '400':
+          description: Invalid ID/parameters supplied.
+        '404':
+          description: Could not locate specified Account.
+
+
+components:
+  schemas:
+    Account:
+      type: object
+      properties:
+        username:
+          type: string
+          example: ExampleUsername1
+        password:
+          type: string
+          example: examplepassword123!
+    AccountWithAPI:
+      type: object
+      properties:
+        username:
+          type: string
+          example: ExampleUsername1
+        password:
+          type: string
+          example: examplepassword123!
+        api_token:
+          type: string
+          example: exampleAPItoken189769
+    
