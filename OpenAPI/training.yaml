@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: DIYML - Train API
+  description: The endpoint for training a model.
+  version: 1.0.0
+paths:
+  /train:
+    post:
+      tags:
+        - Training
+      summary: Train a model.
+      description: Train a model.
+      operationId: trainModel
+      requestBody:
+        description: Train a model.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful training.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainResponse'
+        '400':
+          description: Invalid parameters supplied.
+        '403':
+          description: Invalid project for training.
+        '404':
+          description: Could not locate project.
+
+
+components:
+  schemas:
+    TrainRequest:
+      type: object
+      properties:
+        project_name:
+          type: string
+          example: ExampleProjectName
+        api_token:
+          type: string
+          example: exampleAPItoken189769!
+        train_split:
+          type: number
+          example: 0.80
+        epochs:
+          type: number
+          format: int32
+          example: 150
+    TrainResponse:
+      type: object
+      properties:
+        train_results:
+          type: string
+          example: results from reporting
+    

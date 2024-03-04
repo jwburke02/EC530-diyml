@@ -1,0 +1,43 @@
+openapi: 3.0.3
+info:
+  title: DIYML - Publish API
+  description: The endpoint for publishing a model.
+  version: 1.0.0
+paths:
+  /publish:
+    put:
+      tags:
+        - Publish
+      summary: Publish a model.
+      description: Publish a model.
+      operationId: publishModel
+      requestBody:
+        description: Publish a model.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful publish.
+        '400':
+          description: Invalid parameters supplied.
+        '403':
+          description: Invalid project for publishing.
+        '404':
+          description: Could not locate project.
+
+
+components:
+  schemas:
+    PublishRequest:
+      type: object
+      properties:
+        project_name:
+          type: string
+          example: ExampleProjectName
+        api_token:
+          type: string
+          example: exampleAPItoken189769!
+    

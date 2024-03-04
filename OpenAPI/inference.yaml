@@ -1,0 +1,54 @@
+openapi: 3.0.3
+info:
+  title: DIYML - Inference API
+  description: The endpoint for inferring from a published model.
+  version: 1.0.0
+paths:
+  /inference:
+    post:
+      tags:
+        - Inference
+      summary: Upload an image to have a model make inferences.
+      description: Upload an image to have a model make inferences.
+      operationId: infer
+      requestBody:
+        description: Upload an image to have a model make inferences.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferResults'
+        '400':
+          description: Invalid parameters supplied.
+        '404':
+          description: Could not locate project.
+
+
+components:
+  schemas:
+    InferRequest:
+      type: object
+      properties:
+        project_name:
+          type: string
+          example: ExampleProjectName
+        api_token:
+          type: string
+          example: exampleAPItoken189769!
+        image_data:
+          type: string
+          example: 897498762349871ImageByteData9873264987126398476
+    InferResults:
+      type: object
+      properties:
+        results:
+          type: string
+          example: These are the results from the inference...
+    

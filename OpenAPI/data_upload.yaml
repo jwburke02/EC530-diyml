@@ -1,0 +1,309 @@
+openapi: 3.0.3
+info:
+  title: DIYML - Upload API
+  description: This is the section of the DIYML project which allows for the user to create, reference, and delete project, labels and images for training machine learning models
+  version: 1.0.0
+paths:
+  /upload/project:
+    post:
+      tags:
+        - Project
+      summary: Get information for a project.
+      description: Get information for a project.
+      operationId: getProjectInfo
+      requestBody:
+        description: Get information for a project.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectReference'
+        required: true
+      responses:
+        '200':
+          description: Successful retrieval.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectResults'
+        '400':
+          description: Invalid parameters supplied.
+        '404':
+          description: Could not locate project.
+    put:
+      tags:
+        - Project
+      summary: Create a project.
+      description: Create a project.
+      operationId: createProject
+      requestBody:
+        description: Create a project.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreation'
+        required: true
+      responses:
+        '200':
+          description: Successful creation of project.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectResults'
+        '400':
+          description: Invalid parameters supplied.
+    patch:
+      tags:
+        - Project
+      summary: Delete a project.
+      description: Delete a project.
+      operationId: deleteProject
+      requestBody:
+        description: Delete a project
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectReference'
+        required: true
+      responses:
+        '200':
+          description: Successful deletion.
+        '400':
+          description: Invalid parameters supplied.
+        '404':
+          description: Could not locate project.
+  /upload/data_point:
+    post:
+      tags:
+        - Data Point
+      summary: Get information for a data point inside a project.
+      description: Get information for a data point inside a project.
+      operationId: getDataPointInfo
+      requestBody:
+        description: Get information for a data point inside a project.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataPointReference'
+        required: true
+      responses:
+        '200':
+          description: Successful retrieval.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataPointResults'
+        '400':
+          description: Invalid parameters supplied.
+        '404':
+          description: Could not locate project.
+    put:
+      tags:
+        - Data Point
+      summary: Create a data point within a project.
+      description: Create a data point within a project.
+      operationId: createDataPoint
+      requestBody:
+        description: Create a data point within a project.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataPointObject'
+        required: true
+      responses:
+        '200':
+          description: Successful creation of data point.
+        '400':
+          description: Invalid parameters supplied.
+    patch:
+      tags:
+        - Data Point
+      summary: Delete a data point.
+      description: Delete a data point.
+      operationId: deleteDataPoint
+      requestBody:
+        description: Delete a data point.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataPointReference'
+        required: true
+      responses:
+        '200':
+          description: Successful deletion.
+        '400':
+          description: Invalid parameters supplied.
+        '404':
+          description: Could not locate project.
+  /upload/class_info:
+    post:
+      tags:
+        - Class
+      summary: Get information for a project's classes.
+      description: Get information for a project's classes.
+      operationId: getProjectClassInfo
+      requestBody:
+        description: Get information for a project's classes.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectReference'
+        required: true
+      responses:
+        '200':
+          description: Successful retrieval.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassResults'
+        '400':
+          description: Invalid parameters supplied.
+        '404':
+          description: Could not locate project.
+    put:
+      tags:
+        - Class
+      summary: Place class info in a project.
+      description: Place class info in a project.
+      operationId: createProjectClassInfo
+      requestBody:
+        description: Place class info in a project.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassReference'
+        required: true
+      responses:
+        '200':
+          description: Successful creation of project.
+        '400':
+          description: Invalid parameters supplied.
+    patch:
+      tags:
+        - Class
+      summary: Delete a project's class info.
+      description: Delete a project's class info.
+      operationId: deleteProjectClassInfo
+      requestBody:
+        description: Delete a project's class info.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectReference'
+        required: true
+      responses:
+        '200':
+          description: Successful deletion.
+        '400':
+          description: Invalid parameters supplied.
+        '404':
+          description: Could not locate project.
+              
+
+
+components:
+  schemas:
+    ClassReference:
+      type: object
+      properties:
+        project_name:
+          type: string
+          example: ExampleProjectName
+        api_token:
+          type: string
+          example: exampleAPItoken189769!
+        classes:
+          type: string
+          example: apple|orange|banana|grape
+    DataPointObject:
+      type: object
+      properties:
+        data_point_name:
+          type: string
+          example: ExampleDataPoint
+        project_name:
+          type: string
+          example: ExampleProjectName
+        api_token:
+          type: string
+          example: exampleAPItoken189769!
+        image_data:
+          type: string
+          example: kasudfkas6f978a69s87f679a8s7987q3h7a987dhf9a8sd
+        label_data: 
+          type: string
+          example: 0, 12, 52, 19, Label|0, 12, 52, 19, Label
+    ProjectReference:
+      type: object
+      properties:
+        project_name:
+          type: string
+          example: ExampleProjectName
+        api_token:
+          type: string
+          example: exampleAPItoken189769!
+    DataPointReference:
+      type: object
+      properties:
+        data_point_name:
+          type: string
+          example: ExampleDataPoint
+        project_name:
+          type: string
+          example: ExampleProjectName
+        api_token:
+          type: string
+          example: exampleAPItoken189769!
+    ProjectCreation:
+      type: object
+      properties:
+        project_name:
+          type: string
+          example: ExampleProjectName
+        project_type:
+          type: string
+          example: classification
+        api_token:
+          type: string
+          example: exampleAPItoken189769
+    ProjectResults:
+      type: object
+      properties:
+        project_name: 
+          type: string
+          example: ExampleProjectName
+        project_type:
+          type: string
+          example: classification
+        results:
+          type: string
+          example: ResultsString
+        owner:
+          type: string
+          example: ExampleUser1
+        isPublished:
+          type: boolean
+          example: false
+    DataPointResults:
+      type: object
+      properties:
+        data_point_name:
+          type: string
+          example: ExampleDataPoint
+        project_name: 
+          type: string
+          example: ExampleProjectName
+        results:
+          type: string
+          example: ResultsString
+        owner:
+          type: string
+          example: ExampleUser1
+    ClassResults:
+      type: object
+      properties:
+        project_name:
+          type: string
+          example: ExampleProjectName
+        classes:
+          type: string
+          example: apple|orange|banana|grape

@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse
 
 class UploadProjectAPI(Resource):
-    def get(self):
+    def post(self):
         try:
             parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('api_token', help="API Token cannot be blank...", required=True)
             args = parser.parse_args()
@@ -13,7 +13,7 @@ class UploadProjectAPI(Resource):
             if (result):
                 return result, 200
             else:
-                return {'Error' : 'no such user found'}, 404
+                return {'Error' : 'no such project found'}, 404
         except:
             return "There was some issue with your request", 400
     def put(self):
@@ -28,19 +28,7 @@ class UploadProjectAPI(Resource):
             return result, 200
         except Exception as e:
             return "There was some issue with your request", 400
-    def post(self):
-        try:
-            parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('project_type', help="Project type cannot be blank...", required=True).add_argument('api_token', help="API token cannot be blank...", required=True)
-            args = parser.parse_args()
-            result = {
-                "project_name": args['project_name'],
-                "project_type": args['project_type'],
-                "project_id": 1
-            }
-            return result, 200
-        except Exception as e:
-            return "There was some issue with your request", 400
-    def delete(self):
+    def patch(self):
         try:
             parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('api_token', help="API token cannot be blank...", required=True)
             args = parser.parse_args()
@@ -56,7 +44,7 @@ class UploadProjectAPI(Resource):
             return "There was some issue with your request", 400
         
 class UploadDataAPI(Resource):
-    def get(self):
+    def post(self):
         try:
             parser = reqparse.RequestParser().add_argument('data_point_name',help="Data point name cannot be blank",required=True).add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('api_token', help="API Token cannot be blank...", required=True)
             args = parser.parse_args()
@@ -83,18 +71,7 @@ class UploadDataAPI(Resource):
             return result, 200
         except:
             return "There was some issue with your request", 400
-    def post(self):
-        try:
-            parser = reqparse.RequestParser().add_argument('image_data', required=True).add_argument('label_data', required=True).add_argument('data_point_name',help="Data point name cannot be blank",required=True).add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('api_token', help="API Token cannot be blank...", required=True)
-            args = parser.parse_args()
-            result = {
-                "project_name": args['project_name'],
-                "data_point_name": args['data_point_name']
-            }
-            return result, 200
-        except:
-            return "There was some issue with your request", 400
-    def delete(self):
+    def patch(self):
         try:
             parser = reqparse.RequestParser().add_argument('data_point_name',help="Data point name cannot be blank",required=True).add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('api_token', help="API Token cannot be blank...", required=True)
             args = parser.parse_args()
@@ -111,7 +88,7 @@ class UploadDataAPI(Resource):
             return "There was some issue with your request", 400
         
 class UploadClassAPI(Resource):
-    def get(self):
+    def post(self):
         try:
             parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('api_token', help="API Token cannot be blank...", required=True)
             args = parser.parse_args()
@@ -136,18 +113,7 @@ class UploadClassAPI(Resource):
             return result, 200
         except:
             return "There was some issue with your request", 400
-    def post(self):
-        try:
-            parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('class_info', help="Class types cannot be blank...", required=True).add_argument('api_token', help="API token cannot be blank...", required=True)
-            args = parser.parse_args()
-            result = {
-                "project_name": args['project_name'],
-                "class_info": args['class_info']
-            }
-            return result, 200
-        except:
-            return "There was some issue with your request", 400
-    def delete(self):
+    def patch(self):
         try:
             parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('api_token', help="API Token cannot be blank...", required=True)
             args = parser.parse_args()

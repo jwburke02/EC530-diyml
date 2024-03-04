@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse
 
 class InferenceAPI(Resource):
-    def get(self):
+    def post(self):
         try:
             parser = reqparse.RequestParser().add_argument('api_token', help="API Token cannot be blank...", required=True).add_argument('project_name', help="Project Name cannot be blank...", required=True).add_argument('image_data', required=True)
             args = parser.parse_args()
