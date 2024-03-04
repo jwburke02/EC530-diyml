@@ -1,18 +1,18 @@
 openapi: 3.0.3
 info:
-  title: DIYML - Analyze Model API
-  description: This is the post request endpoint for the analyze model feature of DIYML.
+  title: DIYML - Analyze Data API
+  description: This is the post request endpoint for the analyze data feature of DIYML, allowing users to view statistics about their datasets.
   version: 1.0.0
 paths:
-  /analyze_model:
+  /data_analysis:
     post:
       tags:
-        - Analyze Model
-      summary: Analyze model statistics.
-      description: Analyze model statistics.
-      operationId: analyzeModel
+        - Analyze Data
+      summary: Analyze data statistics.
+      description: Analyze data statistics.
+      operationId: analyzeData
       requestBody:
-        description: Analyze model statistics.
+        description: Analyze data statistics.
         content:
           application/json:
             schema:

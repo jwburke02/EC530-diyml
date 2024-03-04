@@ -38,4 +38,4 @@ jobs:
     - name: Test with pytest
       run: |
         # if i did not ignore services, the test_model would be treated as a test
-        pytest test/ --ignore=services
+        python3 -m pytest test/ --ignore=services
