@@ -1,0 +1,73 @@
+[
+    {
+        "title": "user",
+        "required": [
+            "uid",
+            "username",
+            "hashed_pass",
+            "api_token"
+        ],
+        "properties": {
+            "uid": { "bsonType": "objectId" },
+            "username": { "bsonType": "string" },
+            "hashed_pass": { "bsonType": "string" },
+            "api_token": { "bsonType": "string" }
+        }
+    },
+    {
+        "title": "project",
+        "required": [
+            "pid",
+            "uid",
+            "project_name",
+            "project_type",
+            "current_url",
+            "is_published",
+            "classes",
+            "dids"
+        ],
+        "properties": {
+            "pid": { "bsonType": "objectId" },
+            "uid": { "bsonType": "objectId" },
+            "project_name": { "bsonType": "string" },
+            "project_type": { "bsonType": "string" },
+            "current_url": { "bsonType": "string" },
+            "is_published": { "bsonType": "boolean" },
+            "classes": {
+                "bsonType": "array",
+                "items": "string",
+                "maxItems": 0,
+                "minItems": 25,
+                "uniqueItems": true
+              },
+            "dids": {
+                "bsonType": "array",
+                "items": "objectId",
+                "maxItems": 0,
+                "minItems": 10000,
+                "uniqueItems": true
+              }
+        }
+    },
+    {
+        "title": "data_point",
+        "required": [
+            "did",
+            "name",
+            "location",
+            "labels"
+        ],
+        "properties": {
+            "did": { "bsonType": "objectId" },
+            "name": { "bsonType": "string" },
+            "location": { "bsonType": "string" },
+            "labels": {
+                "bsonType": "array",
+                "items": "string",
+                "maxItems": 0,
+                "minItems": 10,
+                "uniqueItems": true
+              }
+        }
+    }
+]
