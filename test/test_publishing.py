@@ -1,6 +1,6 @@
 import pytest
 from flask.testing import FlaskClient
-from app import app
+from DIYML import app
 
 @pytest.fixture
 def client():
