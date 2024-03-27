@@ -6,7 +6,8 @@ from DIYML import app
 def client():
     return app.test_client()
 
-def test_auth_post(client: FlaskClient):
+def test_auth_post(client: FlaskClient, mocker):
+    mocker.patch('DatabaseAccess.loginUser', return_value="api_token")
     # Happy Path
     resp = client.post('/auth', json={'username': 'username', 'password': 'password'})
 
@@ -18,7 +19,8 @@ def test_auth_post(client: FlaskClient):
     resp = client.post('/auth', json={'username': 'username'})
     assert resp.status_code == 400
 
-def test_auth_put(client: FlaskClient):
+def test_auth_put(client: FlaskClient, mocker):
+    mocker.patch('DatabaseAccess.createUser', return_value="api_token")
     # Happy Path
     resp = client.put('/auth', json={'username': 'username', 'password': 'password'})
 
@@ -30,7 +32,8 @@ def test_auth_put(client: FlaskClient):
     resp = client.put('/auth', json={'username': 'username'})
     assert resp.status_code == 400
 
-def test_auth_patch(client: FlaskClient):
+def test_auth_patch(client: FlaskClient, mocker):
+    mocker.patch('DatabaseAccess.deleteUser', return_value="api_token")
     # Happy Path
     resp = client.patch('/auth', json={'username': 'username', 'password': 'password', 'api_token': 'somehting'})
 
