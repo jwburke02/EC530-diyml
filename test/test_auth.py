@@ -7,7 +7,6 @@ def client():
     return app.test_client()
 
 def test_auth_post(client: FlaskClient, mocker):
-    mocker.patch('config.atlas_uri', 'example_url_atlas')
     mocker.patch('DatabaseAccess.loginUser', return_value="api_token")
     # Happy Path
     resp = client.post('/auth', json={'username': 'username', 'password': 'password'})

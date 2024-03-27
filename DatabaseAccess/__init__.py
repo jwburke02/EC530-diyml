@@ -1,9 +1,15 @@
 import pymongo
-import config
 import hashlib
+import os
+from dotenv import load_dotenv
+
+# Retrieve environment variables
+load_dotenv()
+
+ATLAS_URI = os.getenv("atlas_uri")
 
 # Connect to MongoDB Atlas
-client = pymongo.MongoClient(config.atlas_uri)
+client = pymongo.MongoClient(ATLAS_URI)
 
 # Access the database collections
 db = client['diyml']
