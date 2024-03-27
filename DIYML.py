@@ -1,10 +1,10 @@
-from Services.auth import AuthenticationAPI
-from Services.data_analysis import DataAnalysisAPI
-from Services.analyze_model import AnalyzeModelAPI
-from Services.data_upload import UploadDataAPI, UploadClassAPI, UploadProjectAPI
+from Auth import AuthenticationAPI
+from DataAnalysis import DataAnalysisAPI
+from AnalyzeModel import AnalyzeModelAPI
+from DataUpload import UploadDataAPI, UploadClassAPI, UploadProjectAPI
 from Inference import InferenceAPI
-from Services.publishing import PublishAPI
-from Services.reports import ReportsAPI
+from Publishing import PublishAPI
+from Reports import ReportsAPI
 from Training import TrainAPI
 from flask import Flask
 from flask_restful import Api
