@@ -4,8 +4,87 @@ import hashlib
 
 # Connect to MongoDB Atlas
 client = pymongo.MongoClient(config.atlas_uri)
-# Access the database 
+
+# Access the database collections
 db = client['diyml']
+user_collection = db['user']
+project_collection = db['project']
+data_point_collection = db['data_point']
+
+########
+# USER #
+######## 
+'''
+CREATION
+'''
+def createUser(username, password):
+    # hash for password (and api key)
+    sha256_hash = hashlib.sha256()
+    sha256_hash.update(password.encode('utf-8'))
+    hashed_pass = sha256_hash.hexdigest()
+    sha256_hash.update(hashed_pass.encode('utf-8'))
+    api_token = sha256_hash.hexdigest()
+    # create user object
+    user_doc = {
+        "username": username,
+        "hashed_pass": hashed_pass,
+        "api_token": api_token
+    }
+    
+    # Insert the user document into the collection
+    result = user_collection.insert_one(user_doc)
+    
+    # Check if insertion was successful
+    if result.inserted_id:
+        return api_token
+    else:
+        raise Exception("Unable to create user.")
+'''
+DELETION
+'''
+def deleteUser(username, password, api_token):
+    # HASH PASSWORD
+    sha256_hash = hashlib.sha256()
+    sha256_hash.update(password.encode('utf-8'))
+    hashed_pass = sha256_hash.hexdigest()
+    # FIND USER TO DELETE
+    result = user_collection.delete_one({
+        "username": username,
+        "hashed_pass": hashed_pass,
+        "api_token": api_token
+    })
+    if result.deleted_count == 1:
+        return 
+    else:
+        raise Exception("Unable to delete user.")
+'''
+LOGIN
+'''
+def loginUser(username, password):
+    # HASH PASSWORD
+    sha256_hash = hashlib.sha256()
+    sha256_hash.update(password.encode('utf-8'))
+    hashed_pass = sha256_hash.hexdigest()
+    # FIND USER TO LOGIN
+    found_user = user_collection.find_one({
+        "username": username,
+        "hashed_pass": hashed_pass,
+    })
+    if found_user:
+        return found_user['api_token']
+    else:
+        raise Exception("Unable to find a user.")
+###########
+# PROJECT #
+###########
+
+#############
+# DATAPOINT #
+#############
+
+###########
+# CLASSES #
+###########
 
 ########
 # USER #
