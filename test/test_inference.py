@@ -11,8 +11,8 @@ def test_inference_post(client: FlaskClient):
     resp = client.post('/inference', json={'api_token': 'token', 'project_name': 'name', 'image_data':'data'})
 
     assert resp.status_code == 200
-    assert resp.json.get('DetectionResults')
-    assert resp.json.get('project_name')
+    assert resp.json.get('RequestResult')
+    assert resp.json.get('inference_mapping') == 0 # first item placed in queue should have this
 
     # Sad Path
     resp = client.post('/inference', json={'username': 'username'})

@@ -11,8 +11,7 @@ def test_train_put(client: FlaskClient):
     resp = client.put('/train', json={'api_token': 'token', 'project_name': 'name', 'train_split':'splt', "epochs":"12"})
 
     assert resp.status_code == 200
-    assert resp.json.get('TrainResults')
-    assert resp.json.get('Status')
+    assert resp.json.get('RequestResult')
 
     # Sad Path
     resp = client.put('/train', json={'username': 'username'})
