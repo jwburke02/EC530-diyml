@@ -1,13 +1,15 @@
 import pymongo
 import config
 import hashlib
-import re
 
 # Connect to MongoDB Atlas
 client = pymongo.MongoClient(config.atlas_uri)
 # Access the database 
 db = client['diyml']
 
+########
+# USER #
+######## 
 def createNewUserInDatabase(username, password):
     # specify user collection
     collection = db['user']
@@ -34,6 +36,9 @@ def createNewUserInDatabase(username, password):
         print("Failed to add user.")
     return
 
+###########
+# PROJECT #
+###########
 def createNewProjectInDatabase(project_name, project_type, api_token):
     # we need two collections here
     user_collection = db['user']
@@ -55,6 +60,25 @@ def createNewProjectInDatabase(project_name, project_type, api_token):
     project_collection.insert_one(project_doc)
     return
 
+def addClassesToProjectInDatabase(project_name, class_info):
+    # we need the project_collection
+    project_collection = db['project']
+    # we should overwrite the classes of the current project
+    class_list = class_info.split("|")
+    result = project_collection.update_one(
+        {"project_name": project_name},
+        {"$set": {"classes": class_list}}
+    )
+    # Check if the update was successful
+    if result.modified_count > 0:
+        print("Value appended successfully.")
+    else:
+        print("Failed to append value.")
+    return
+
+#############
+# DATAPOINT #
+#############
 def createNewDataPointInDatabase(project_name, data_point_name, label_data, location):
     # we need access to both the project collection and data_point collection
     data_point_collection = db['data_point']
@@ -63,7 +87,7 @@ def createNewDataPointInDatabase(project_name, data_point_name, label_data, loca
     data_point_doc = {
         "name": data_point_name,
         "location": location,
-        "labels": re.split('|', label_data)
+        "labels": label_data.split("|")
     }
     # place in the data_point and grab the id
     did = data_point_collection.insert_one(data_point_doc).inserted_id
