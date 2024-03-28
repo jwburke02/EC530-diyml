@@ -17,7 +17,7 @@ def makeInference(args):
     api_token = args['api_token']
     image_data = args['image_data']
     project = DatabaseAccess.getProjectInfo(project_name, api_token)
-    if project['current_url'] == 'NONE':
+    if project['current_url'] == 'NONE' or project['is_published'] == False:
         return # we have nothing to infer with
     # MUST BE REPLACED WITH INFERENCE LOGIC
     model = YOLO(project['current_url'])
