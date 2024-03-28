@@ -12,7 +12,3 @@ This module is used in order to train a model. If a project folder is complete e
 This module is used to publish a previously trained model within a project.
 ### Inference
 This module is used to utilized a previously trained and published model.
-### Test Model
-This modeule is used to test a model that is unpublished.
-### Reports
-This API endpoint is used in order to report information and scores about a specified model.
