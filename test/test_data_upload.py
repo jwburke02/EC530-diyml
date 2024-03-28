@@ -37,6 +37,7 @@ def test_upload_project_put(client: FlaskClient, mocker):
 
 def test_upload_project_patch(client: FlaskClient, mocker):
     mocker.patch('DatabaseAccess.deleteProject', return_value={})
+    mocker.patch('utils.remove_folder_contents_and_folder', return_value={})
     # Happy Path
     resp = client.patch('/upload/project', json={'project_name': 'name', 'api_token': 'somehting'})
 
