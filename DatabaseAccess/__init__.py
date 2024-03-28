@@ -139,11 +139,28 @@ def getProjectInfo(project_name, api_token):
 ADD URL TO PROJECT
 '''
 def addModelURLToProject(project_name, URL):
-    result = project_collection.update_one({}, {"$set": {"current_url": URL}})
-    if result.modified_count == 1:
-        return
+    project_collection.update_one({"project_name": project_name}, {"$set": {"current_url": URL}})
+    return
+
+'''
+PUBLISH/UNPUBLISH PROJECT
+'''
+def projectPublishing(project_name, api_token, is_published):
+    # check if this is project associated with api_token
+    project = project_collection.find_one({"project_name": project_name})
+    user = user_collection.find_one({"api_token": api_token})
+    if user['_id'] == project['uid']:
+        # add classes to project
+        result = project_collection.update_one(
+            {"project_name": project_name},
+            {"$set": {"is_published": is_published}}
+        )
+        if result.modified_count > 0:
+            return
+        else:
+            raise Exception("Unable to modify published status of project.")
     else:
-        raise Exception("Unable to update model link.")
+        raise Exception("Incorrect api_key given project name.")
 
 ###########
 # CLASSES #

@@ -17,9 +17,8 @@ def makeInference(args):
     api_token = args['api_token']
     image_data = args['image_data']
     project = DatabaseAccess.getProjectInfo(project_name, api_token)
-    if project['current_url'] == 'NONE' or project['is_published'] == False:
+    if project['current_url'] == 'NONE' or project['is_published'] == 'False':
         return # we have nothing to infer with
-    # MUST BE REPLACED WITH INFERENCE LOGIC
     model = YOLO(project['current_url'])
     # place image_data into local path and figure out the path
     decoded_binary = base64.b64decode(image_data)
@@ -35,10 +34,10 @@ def makeInference(args):
       cords = box.xyxy[0].tolist()
       class_id = box.cls[0].item()
       conf = box.conf[0].item()
-      type = result.names[class_id]
+      object_type = result.names[class_id]
       response.append({
           "coords": cords,
-          "classification": type,
+          "classification": object_type,
           "confidence": conf
       })
     if length == 0:
