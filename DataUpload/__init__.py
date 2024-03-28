@@ -1,16 +1,15 @@
 from flask_restful import Resource, reqparse
+import DatabaseAccess
 
 class UploadProjectAPI(Resource):
     def post(self):
         try:
             parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('api_token', help="API Token cannot be blank...", required=True)
             args = parser.parse_args()
-            result = {
-                "project_name": args['project_name'],
-                "project_type": 'classification',
-                "project_id": 1
-            }
+            result = DatabaseAccess.getProjectInfo(args['project_name'], args['api_token'])
             if (result):
+                result['_id'] = str(result['_id'])
+                result['uid'] = str(result['uid'])
                 return result, 200
             else:
                 return {'Error' : 'no such project found'}, 404
@@ -20,10 +19,11 @@ class UploadProjectAPI(Resource):
         try:
             parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('project_type', help="Project type cannot be blank...", required=True).add_argument('api_token', help="API token cannot be blank...", required=True)
             args = parser.parse_args()
+            project_id = DatabaseAccess.createProject(args['project_name'], args['project_type'], args['api_token'])
             result = {
                 "project_name": args['project_name'],
                 "project_type": args['project_type'],
-                "project_id": 1
+                "project_id": str(project_id)
             }
             return result, 200
         except Exception as e:
@@ -32,14 +32,8 @@ class UploadProjectAPI(Resource):
         try:
             parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('api_token', help="API token cannot be blank...", required=True)
             args = parser.parse_args()
-            result = {
-                "project_name": args['project_name'],
-                "api_token": "token"
-            }
-            if (result):
-                return {"Status": "Successful deletion"}, 200
-            else:
-                return {'Error' : 'no such user found'}, 404
+            DatabaseAccess.deleteProject(args['project_name'], args['api_token'])
+            return {"Status": "Successful deletion"}, 200
         except:
             return "There was some issue with your request", 400
         

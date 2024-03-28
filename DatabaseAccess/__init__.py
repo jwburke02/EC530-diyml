@@ -81,7 +81,59 @@ def loginUser(username, password):
 ###########
 # PROJECT #
 ###########
-
+'''
+PROJECT CREATION
+'''
+def createProject(project_name, project_type, api_token):
+    # check if api_token present in users table
+    user = user_collection.find_one({"api_token": api_token})
+    # check if project present already
+    project = project_collection.find_one({"project_name": project_name})
+    if (project):
+        raise Exception("You cant create this, name taken.")
+    if user:
+        project_doc = {
+            "uid": user['_id'],
+            "project_name": project_name,
+            "project_type": project_type,
+            "current_url": "NONE",
+            "is_published": False,
+            "classes": [],
+            "dids": []
+        }
+        result = project_collection.insert_one(project_doc).inserted_id
+        if (result):
+            return result
+        else:
+            raise Exception("Unable to create project.")
+    else:
+        raise Exception("Invalid api_token")
+'''
+PROJECT DELETION
+'''
+def deleteProject(project_name, api_token):
+    # check if this is project associated with api_token
+    project = project_collection.find_one({"project_name": project_name})
+    user = user_collection.find_one({"api_token": api_token})
+    if user['_id'] == project['uid']:
+        dids_to_delete = project['dids']
+        project_collection.delete_one({"project_name": project_name})
+        for did in dids_to_delete:
+            data_point_collection.delete_one({"_id": did})
+    else:
+        raise Exception("Incorrect api_key given project name.")
+'''
+PROJECT DETAIL ENDPOINT
+'''
+def getProjectInfo(project_name, api_token):
+    # check if this is project associated with api_token
+    project = project_collection.find_one({"project_name": project_name})
+    user = user_collection.find_one({"api_token": api_token})
+    if user['_id'] == project['uid']:
+        # return the project
+        return project
+    else:
+        raise Exception("Incorrect api_key given project name.")
 #############
 # DATAPOINT #
 #############
@@ -89,37 +141,6 @@ def loginUser(username, password):
 ###########
 # CLASSES #
 ###########
-
-########
-# USER #
-######## 
-def createNewUserInDatabase(username, password):
-    client = pymongo.MongoClient(MONGO_URI)
-    db = client['diyml'] 
-    # specify user collection
-    collection = db['user']
-    # hash for password (and api key)
-    sha256_hash = hashlib.sha256()
-    sha256_hash.update(password.encode('utf-8'))
-    hashed_pass = sha256_hash.hexdigest()
-    sha256_hash.update(hashed_pass.encode('utf-8'))
-    api_token = sha256_hash.hexdigest()
-    # create user object
-    user_doc = {
-        "username": username,
-        "hashed_pass": hashed_pass,
-        "api_token": api_token
-    }
-    
-    # Insert the user document into the collection
-    result = collection.insert_one(user_doc).inserted_id
-    
-    # Check if insertion was successful
-    if result:
-        print("User added successfully.")
-    else:
-        print("Failed to add user.")
-    return
 
 ###########
 # PROJECT #
