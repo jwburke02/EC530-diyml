@@ -1,6 +1,5 @@
 from Auth import AuthenticationAPI
 from DataAnalysis import DataAnalysisAPI
-from AnalyzeModel import AnalyzeModelAPI
 from DataUpload import UploadDataAPI, UploadClassAPI, UploadProjectAPI
 from Inference import InferenceAPI
 from Publishing import PublishAPI
@@ -16,7 +15,6 @@ api = Api(app)
 # add configured service endpoints  
 api.add_resource(AuthenticationAPI, '/auth')  # Auth
 api.add_resource(DataAnalysisAPI, '/data_analysis')  # image/label data info
-api.add_resource(AnalyzeModelAPI, '/analyze_model')  # model results + scores
 api.add_resource(UploadDataAPI, '/upload/data_point')  # datapoint upload (images + labels)
 api.add_resource(UploadClassAPI, '/upload/class_info')  # class upload (list of strings)
 api.add_resource(UploadProjectAPI, '/upload/project')  # project upload (new project document)
