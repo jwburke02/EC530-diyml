@@ -1,5 +1,10 @@
 from flask_restful import Resource, reqparse
 from JovQueue import JovQueue
+from ultralytics import YOLO
+from utils import remove_folder_contents_and_folder, ROOT_DIR
+import DatabaseAccess
+import os
+import base64
 
 stored_inferences = {}
 
@@ -9,13 +14,36 @@ def makeInference(args):
     '''
     project_name = args['project_name']
     inference_mapping = args['inference_mapping']
-
+    api_token = args['api_token']
+    image_data = args['image_data']
+    project = DatabaseAccess.getProjectInfo(project_name, api_token)
+    if project['current_url'] == 'NONE':
+        return # we have nothing to infer with
     # MUST BE REPLACED WITH INFERENCE LOGIC
-    result = {
-        "InferenceResults": f"Example inference results for {project_name}"
-    }
-
-    stored_inferences[inference_mapping] = result
+    model = YOLO(project['current_url'])
+    # place image_data into local path and figure out the path
+    decoded_binary = base64.b64decode(image_data)
+    with open(f"{ROOT_DIR}/{project_name}.jpg", "wb") as image_file: # temp file
+        image_file.write(decoded_binary)
+    results = model.predict(f"{ROOT_DIR}/{project_name}.jpg")
+    # cleanup image path and place results
+    os.remove(f"{ROOT_DIR}/{project_name}.jpg")
+    result = results[0]
+    length = len(result.boxes)
+    response = []
+    for box in result.boxes:
+      cords = box.xyxy[0].tolist()
+      class_id = box.cls[0].item()
+      conf = box.conf[0].item()
+      type = result.names[class_id]
+      response.append({
+          "coords": cords,
+          "classification": type,
+          "confidence": conf
+      })
+    if length == 0:
+        response = ["Nothing Detected in Image"]
+    stored_inferences[inference_mapping] = response
     return
 
 inference_queue = JovQueue(3, makeInference)
@@ -40,6 +68,7 @@ class InferenceAPI(Resource):
             arguments = {}
             arguments['project_name'] = args['project_name']
             arguments['image_data'] = args['image_data']
+            arguments['api_token'] = args['api_token']
             for i in range(100):
                 if i in stored_inferences:
                     continue
