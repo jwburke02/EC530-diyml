@@ -86,12 +86,9 @@ class UploadClassAPI(Resource):
         try:
             parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('api_token', help="API Token cannot be blank...", required=True)
             args = parser.parse_args()
-            result = {
-                "project_name": args['project_name'],
-                "class_info": 'class information about project'
-            }
-            if (result):
-                return result, 200
+            class_list = DatabaseAccess.getProjectClasses(args['project_name'], args['api_token'])
+            if (class_list):
+                return class_list, 200
             else:
                 return {'Error' : 'no such user found'}, 404
         except:
@@ -100,25 +97,15 @@ class UploadClassAPI(Resource):
         try:
             parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('class_info', help="Class types cannot be blank...", required=True).add_argument('api_token', help="API token cannot be blank...", required=True)
             args = parser.parse_args()
-            result = {
-                "project_name": args['project_name'],
-                "class_info": args['class_info']
-            }
-            return result, 200
+            DatabaseAccess.addProjectClasses(args['project_name'], args['api_token'], args['class_info'])
+            return {"Status": "Classes Added."}, 200
         except:
             return "There was some issue with your request", 400
     def patch(self):
         try:
             parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('api_token', help="API Token cannot be blank...", required=True)
             args = parser.parse_args()
-            result = {
-                "project_name": args['project_name'],
-                "class_info": "Class info",
-                "api_token": "token"
-            }
-            if (result):
-                return {"Status": "Successful deletion"}, 200
-            else:
-                return {'Error' : 'no such user found'}, 404
+            DatabaseAccess.deleteProjectClasses(args['project_name'], args['api_token'])
+            return {"Status": "Successful deletion"}, 200
         except:
             return "There was some issue with your request", 400

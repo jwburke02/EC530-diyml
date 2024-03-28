@@ -141,46 +141,56 @@ def getProjectInfo(project_name, api_token):
 ###########
 # CLASSES #
 ###########
-
-###########
-# PROJECT #
-###########
-def createNewProjectInDatabase(project_name, project_type, api_token):
-    # we need two collections here
-    user_collection = db['user']
-    project_collection = db['project']
-    # get uid from the user with api_token
+'''
+VIEW CLASSES FOR PROJECT
+'''
+def getProjectClasses(project_name, api_token):
+    # check if this is project associated with api_token
+    project = project_collection.find_one({"project_name": project_name})
     user = user_collection.find_one({"api_token": api_token})
-    uid = user["_id"]
-    # create project object
-    project_doc = {
-        "project_name": project_name,
-        "project_type": project_type,
-        "current_url": "None",
-        "is_published": False,
-        "classes": [],
-        "dids": [],
-        "uid": uid
-    }
-    # place project in storage
-    project_collection.insert_one(project_doc)
-    return
-
-def addClassesToProjectInDatabase(project_name, class_info):
-    # we need the project_collection
-    project_collection = db['project']
-    # we should overwrite the classes of the current project
-    class_list = class_info.split("|")
-    result = project_collection.update_one(
-        {"project_name": project_name},
-        {"$set": {"classes": class_list}}
-    )
-    # Check if the update was successful
-    if result.modified_count > 0:
-        print("Value appended successfully.")
+    if user['_id'] == project['uid']:
+        # return the project classes
+        return project['classes']
     else:
-        print("Failed to append value.")
-    return
+        raise Exception("Incorrect api_key given project name.")
+'''
+ADD/REPLACE CLASSES TO PROJECT
+'''
+def addProjectClasses(project_name, api_token, class_info):
+    # check if this is project associated with api_token
+    project = project_collection.find_one({"project_name": project_name})
+    user = user_collection.find_one({"api_token": api_token})
+    if user['_id'] == project['uid']:
+        # add classes to project
+        result = project_collection.update_one(
+            {"project_name": project_name},
+            {"$set": {"classes": class_info.split("|")}}
+        )
+        if result.modified_count > 0:
+            return
+        else:
+            raise Exception("Unable to add classes to project.")
+    else:
+        raise Exception("Incorrect api_key given project name.")
+'''
+REMOVE CLASSES FROM PROJECT
+'''
+def deleteProjectClasses(project_name, api_token):
+    # check if this is project associated with api_token
+    project = project_collection.find_one({"project_name": project_name})
+    user = user_collection.find_one({"api_token": api_token})
+    if user['_id'] == project['uid']:
+        # remove classes from project
+        result = project_collection.update_one(
+            {"project_name": project_name},
+            {"$set": {"classes": []}}
+        )
+        if result.modified_count > 0:
+            return
+        else:
+            raise Exception("Unable to remove classes from project.")
+    else:
+        raise Exception("Incorrect api_key given project name.")
 
 #############
 # DATAPOINT #
