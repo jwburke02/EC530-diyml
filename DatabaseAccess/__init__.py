@@ -215,7 +215,36 @@ def deleteProjectClasses(project_name, api_token):
             raise Exception("Unable to remove classes from project.")
     else:
         raise Exception("Incorrect api_key given project name.")
-
+    
+'''
+DATA ANALYSIS DATABASE FUNCTION
+'''
+def analyzeProject(project_name, api_token):
+    # the return from this is forwarded as analysis to endpoint
+    # locate project 
+    project = project_collection.find_one({"project_name": project_name})
+    user = user_collection.find_one({"api_token": api_token})
+    response = {} # to be sent as response
+    if user['_id'] == project['uid']:
+        response['project_name'] = project_name
+        response['project_type'] = project['project_type']
+        response['is_published'] = project['is_published']
+        response['classes'] = project['classes']
+        response['data_points'] = []
+        for did in project['dids']:
+            # get the data from table
+            d_dict = {}
+            data_point = data_point_collection.find_one({"_id": did})
+            d_dict['name'] = data_point['name']
+            d_dict['labels'] = data_point['labels']
+            response['data_points'].append(d_dict)
+        if(response):
+            return response
+        else: 
+            raise Exception("Error analyzing project.")
+    else:
+        raise Exception("Error finding project.")
+        
 #############
 # DATAPOINT #
 #############
