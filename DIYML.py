@@ -3,7 +3,6 @@ from DataAnalysis import DataAnalysisAPI
 from DataUpload import UploadDataAPI, UploadClassAPI, UploadProjectAPI
 from Inference import InferenceAPI
 from Publishing import PublishAPI
-from Reports import ReportsAPI
 from Training import TrainAPI
 from flask import Flask
 from flask_restful import Api
@@ -20,7 +19,6 @@ api.add_resource(UploadClassAPI, '/upload/class_info')  # class upload (list of 
 api.add_resource(UploadProjectAPI, '/upload/project')  # project upload (new project document)
 api.add_resource(InferenceAPI, '/inference')  # API for detection or classification using a trained model
 api.add_resource(PublishAPI, '/publish')  # API for publishing a project as a model
-api.add_resource(ReportsAPI, '/reporting')  # API for reporting model stats
 api.add_resource(TrainAPI, '/train')  # API for training
 
 # run on all available hosts locally on 7001
