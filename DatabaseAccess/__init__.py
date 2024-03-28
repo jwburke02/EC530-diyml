@@ -195,26 +195,67 @@ def deleteProjectClasses(project_name, api_token):
 #############
 # DATAPOINT #
 #############
-def createNewDataPointInDatabase(project_name, data_point_name, label_data, location):
-    # we need access to both the project collection and data_point collection
-    data_point_collection = db['data_point']
-    project_collection = db['project']
-    # we create the object
+'''
+ADD NEW DATAPOINT TO PROJECT
+'''
+def addDatapoint(data_point_name, project_name, api_token, location, label_data):
+    # get project id
+    project = project_collection.find_one({"project_name": project_name})
+    # make sure api_token is valid
+    user = user_collection.find_one({"api_token": api_token})
+    if project['uid'] != user['_id']:
+        raise Exception("Incorrect api_token for associated project.")
+    # now we can write data_point with info we have
     data_point_doc = {
         "name": data_point_name,
         "location": location,
-        "labels": label_data.split("|")
+        "labels": label_data.split("|"),
+        "pid": project['_id'],
     }
-    # place in the data_point and grab the id
-    did = data_point_collection.insert_one(data_point_doc).inserted_id
-    # we should now push the did to the appropriate project
-    result = project_collection.update_one(
-        {"project_name": project_name},
-        {"$push": {"dids": did}}
-    )
-    # Check if the update was successful
-    if result.modified_count > 0:
-        print("Value appended successfully.")
+    result = data_point_collection.insert_one(data_point_doc).inserted_id
+    if (result):
+        # append the did to project
+        project_collection.update_one(
+            {"project_name": project_name},
+            {"$push": {"dids": result}}
+        )
+        return
     else:
-        print("Failed to append value.")
-    return
+        raise Exception("Unable to create data_point.")
+'''
+DELETE DATAPOINT FROM PROJECT
+'''
+def deleteDatapoint(data_point_name, project_name, api_token):
+    # get project id
+    project = project_collection.find_one({"project_name": project_name})
+    # make sure api_token is valid
+    user = user_collection.find_one({"api_token": api_token})
+    if project['uid'] != user['_id']:
+        raise Exception("Incorrect api_token for associated project.")
+    # grab data_point
+    result = data_point_collection.find_one_and_delete({"name": data_point_name, "pid": project['_id']})
+    if (result):
+        # remove the id from project
+        project_collection.update_one({"project_name": project_name},{"$pull": {"dids": result['_id']}})
+        return 
+    else:
+        raise Exception("Unable to delete data_point.")
+
+'''
+VIEW DETAIL ABOUT DATAPOINT
+'''
+def getDatapoint(data_point_name, project_name, api_token):
+    print(f"{data_point_name}{project_name}{api_token}")
+    # get project id
+    project = project_collection.find_one({"project_name": project_name})
+    # make sure api_token is valid
+    user = user_collection.find_one({"api_token": api_token})
+    if project['uid'] != user['_id']:
+        raise Exception("Incorrect api_token for associated project.")
+    # grab data_point
+    result = data_point_collection.find_one({"name": data_point_name, "pid": project['_id']})
+    if (result):
+        print(result)
+        return result
+    else:
+        raise Exception("Unable to find datapoint.")

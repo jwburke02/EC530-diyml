@@ -2,13 +2,13 @@
     {
         "title": "user",
         "required": [
-            "uid",
+            "_id",
             "username",
             "hashed_pass",
             "api_token"
         ],
         "properties": {
-            "uid": { "bsonType": "objectId" },
+            "_id": { "bsonType": "objectId" },
             "username": { "bsonType": "string" },
             "hashed_pass": { "bsonType": "string" },
             "api_token": { "bsonType": "string" }
@@ -17,7 +17,7 @@
     {
         "title": "project",
         "required": [
-            "pid",
+            "_id",
             "uid",
             "project_name",
             "project_type",
@@ -27,7 +27,7 @@
             "dids"
         ],
         "properties": {
-            "pid": { "bsonType": "objectId" },
+            "_id": { "bsonType": "objectId" },
             "uid": { "bsonType": "objectId" },
             "project_name": { "bsonType": "string" },
             "project_type": { "bsonType": "string" },
@@ -52,13 +52,15 @@
     {
         "title": "data_point",
         "required": [
-            "did",
+            "_id",
+            "pid",
             "name",
             "location",
             "labels"
         ],
         "properties": {
-            "did": { "bsonType": "objectId" },
+            "_id": { "bsonType": "objectId" },
+            "pid": { "bsonType": "objectId" },
             "name": { "bsonType": "string" },
             "location": { "bsonType": "string" },
             "labels": {
