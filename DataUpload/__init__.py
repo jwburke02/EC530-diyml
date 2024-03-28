@@ -100,7 +100,7 @@ class UploadClassAPI(Resource):
             args = parser.parse_args()
             class_list = DatabaseAccess.getProjectClasses(args['project_name'], args['api_token'])
             if (class_list):
-                return class_list, 200
+                return {"class_list": class_list}, 200
             else:
                 return {'Error' : 'no such user found'}, 404
         except:
