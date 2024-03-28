@@ -6,13 +6,13 @@ from dotenv import load_dotenv
 # Retrieve environment variables
 load_dotenv()
 
-ATLAS_URI = os.getenv("atlas_uri")
+MONGO_URI = os.getenv("MONGO_URI")
 
-# Connect to MongoDB Atlas
-client = pymongo.MongoClient(ATLAS_URI)
+# Establish MongoDB connection
+client = pymongo.MongoClient(MONGO_URI)
 
-# Access the database collections
 db = client['diyml']
+
 user_collection = db['user']
 project_collection = db['project']
 data_point_collection = db['data_point']
@@ -36,10 +36,8 @@ def createUser(username, password):
         "hashed_pass": hashed_pass,
         "api_token": api_token
     }
-    
     # Insert the user document into the collection
     result = user_collection.insert_one(user_doc)
-    
     # Check if insertion was successful
     if result.inserted_id:
         return api_token
@@ -96,6 +94,8 @@ def loginUser(username, password):
 # USER #
 ######## 
 def createNewUserInDatabase(username, password):
+    client = pymongo.MongoClient(MONGO_URI)
+    db = client['diyml'] 
     # specify user collection
     collection = db['user']
     # hash for password (and api key)
@@ -112,10 +112,10 @@ def createNewUserInDatabase(username, password):
     }
     
     # Insert the user document into the collection
-    result = collection.insert_one(user_doc)
+    result = collection.insert_one(user_doc).inserted_id
     
     # Check if insertion was successful
-    if result.inserted_id:
+    if result:
         print("User added successfully.")
     else:
         print("Failed to add user.")
