@@ -2,17 +2,7 @@ from flask_restful import Resource, reqparse
 import base64
 import os
 import DatabaseAccess
-from definitions import ROOT_DIR
-
-def remove_folder_contents_and_folder(folder_path):
-    for item in os.listdir(folder_path):
-        item_path = os.path.join(folder_path, item)
-        if os.path.isfile(item_path):
-            os.remove(item_path)
-        elif os.path.isdir(item_path):
-            remove_folder_contents_and_folder(item_path)
-
-    os.rmdir(folder_path)
+from utils import ROOT_DIR, remove_folder_contents_and_folder
 
 class UploadProjectAPI(Resource):
     def post(self):

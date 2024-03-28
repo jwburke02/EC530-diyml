@@ -134,9 +134,16 @@ def getProjectInfo(project_name, api_token):
         return project
     else:
         raise Exception("Incorrect api_key given project name.")
-#############
-# DATAPOINT #
-#############
+    
+'''
+ADD URL TO PROJECT
+'''
+def addModelURLToProject(project_name, URL):
+    result = project_collection.update_one({}, {"$set": {"current_url": URL}})
+    if result.modified_count == 1:
+        return
+    else:
+        raise Exception("Unable to update model link.")
 
 ###########
 # CLASSES #
@@ -259,3 +266,16 @@ def getDatapoint(data_point_name, project_name, api_token):
         return result
     else:
         raise Exception("Unable to find datapoint.")
+    
+'''
+USE DID TO GET LOCATION AND LABEL LIST
+'''
+def getDatapointTraining(did):
+    data_point = data_point_collection.find_one({"_id": did})
+    result = {
+
+    }
+    result['location'] = data_point['location']
+    result['labels'] = data_point['labels']
+    result['name'] = data_point['name']
+    return result
