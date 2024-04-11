@@ -8,14 +8,75 @@ load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
 
+# Functions for retrieving collection with custom schema
+def userCollection(DB):
+    if "user" in DB.list_collection_names():
+        print("DATABASE: Returning existing structured database (user).")
+        return DB['user']
+    else:
+        print("DATABASE: Returning new structured database (user).")
+        return DB.create_collection('user', validator= {
+                    "$jsonSchema": {
+                        "bsonType": "object",
+                        "required": ["username", "hashed_pass", "api_token"],
+                        "properties": {
+                            "username": {"bsonType": "string"},
+                            "hashed_pass": {"bsonType": "string"},
+                            "api_token": {"bsonType": "string"}
+        }}})
+def projectCollection(DB):
+    if "project" in DB.list_collection_names():
+        print("DATABASE: Returning existing structured database (project).")
+        return DB['project']
+    else:
+        print("DATABASE: Returning new structured database (project).")
+        return DB.create_collection('project', validator= {
+                    "$jsonSchema": {
+                        "bsonType": "object",
+                        "required": ["uid", "project_name", "project_type", "current_url", "is_published", "classes", "dids"],
+                        "properties": {
+                            "uid": {"bsonType": "objectId"},
+                            "project_name": {"bsonType": "string"},
+                            "project_type": {"bsonType": "string"},
+                            "current_url": {"bsonType": "string"},
+                            "is_published": {"bsonType": "bool"},
+                            "classes": {
+                                "bsonType": "array",
+                                "items": {"bsonType": "string"}
+                            },
+                            "dids": {
+                                "bsonType": "array",
+                                "items": {"bsonType": "objectId"}
+                            }
+        }}})
+def dataPointCollection(DB):
+    if "data_point" in DB.list_collection_names():
+        print("DATABASE: Returning existing structured database (data_point).")
+        return DB['data_point']
+    else:
+        print("DATABASE: Returning new structured database (data_point).")
+        return DB.create_collection('data_point', validator= {
+                    "$jsonSchema": {
+                        "bsonType": "object",
+                        "required": ["pid", "name", "location", "labels"],
+                        "properties": {
+                            "pid": {"bsonType": "objectId"},
+                            "name": {"bsonType": "string"},
+                            "location": {"bsonType": "string"},
+                            "labels": {
+                                "bsonType": "array",
+                                "items": {"bsonType": "string"}
+                            }
+        }}})
+
 # Establish MongoDB connection
 client = pymongo.MongoClient(MONGO_URI)
 
 db = client['diyml']
 
-user_collection = db['user']
-project_collection = db['project']
-data_point_collection = db['data_point']
+user_collection = userCollection(db)
+project_collection = projectCollection(db)
+data_point_collection = dataPointCollection(db)
 
 ########
 # USER #
