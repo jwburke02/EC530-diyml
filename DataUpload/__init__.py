@@ -34,7 +34,7 @@ class UploadProjectAPI(Resource):
                 "project_id": str(project_id)
             }
             return result, 200
-        except Exception as e:
+        except:
             return "There was some issue with your request", 400
     def patch(self):
         try:
