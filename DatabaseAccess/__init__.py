@@ -82,6 +82,15 @@ data_point_collection = dataPointCollection(db)
 # USER #
 ######## 
 '''
+RETURN TRUE IF EXIST
+'''
+def userExists(username):
+    if (user_collection.find_one({"username": username})):
+        return True
+    else:
+        return False
+
+'''
 CREATION
 '''
 def createUser(username, password):
