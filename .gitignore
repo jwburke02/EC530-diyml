@@ -5,3 +5,4 @@ test.py
 .env
 .pytest_cache
 yolov8m.pt
+.DS_Store
