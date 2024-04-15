@@ -22,7 +22,7 @@ class AuthenticationAPI(Resource):
         try:
             parser = reqparse.RequestParser().add_argument('username', help="Username cannot be blank...", required=True).add_argument('password', help="Password cannot be blank...", required=True)
             args = parser.parse_args()
-            if not DatabaseAccess.userExists(args['username']):
+            if DatabaseAccess.userExists(args['username']):
                 return "User already exists.", 400
             api_token = DatabaseAccess.createUser(args['username'], args['password'])
             result = {
