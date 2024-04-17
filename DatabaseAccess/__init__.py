@@ -204,7 +204,17 @@ def getProjectInfo(project_name, api_token):
         return project
     else:
         raise Exception("Incorrect api_key given project name.")
-    
+'''
+GET ALL PROJECT INFOS
+'''
+def getAllProjects(username):
+    # get uid from user_name
+    user = user_collection.find_one({"username": username})
+    uid = user['_id']
+    # use this uid to get every possible project
+    projcursor = project_collection.find({"uid": uid})
+    return [item for item in projcursor]
+
 '''
 ADD URL TO PROJECT
 '''

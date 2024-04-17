@@ -5,6 +5,19 @@ import DatabaseAccess
 from utils import ROOT_DIR, remove_folder_contents_and_folder
 
 class UploadProjectAPI(Resource):
+    def get(self):
+        try:
+            parser = reqparse.RequestParser().add_argument('username', help="username cannot be blank...", required=True, location='args')
+            username = parser.parse_args()['username']
+            projects = DatabaseAccess.getAllProjects(username)
+            # remove pid and dids fields, as well as id field
+            for project in projects:
+                project['dids'] = []
+                project['_id'] = None
+                project['uid'] = None
+            return projects, 200
+        except:
+            return "There was an issue with your request", 400
     def post(self):
         try:
             parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('api_token', help="API Token cannot be blank...", required=True)
