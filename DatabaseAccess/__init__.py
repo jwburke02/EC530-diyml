@@ -155,7 +155,7 @@ def loginUser(username, password):
 PROJECT EXISTS
 '''
 def projectExists(project_name):
-    if (project_name.find_one({"project_name": project_name})):
+    if (project_collection.find_one({"project_name": project_name})):
         return True
     else:
         return False

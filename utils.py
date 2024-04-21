@@ -3,6 +3,8 @@ import os
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def remove_folder_contents_and_folder(folder_path):
+    if not os.path.exists(folder_path):
+        return
     for item in os.listdir(folder_path):
         item_path = os.path.join(folder_path, item)
         if os.path.isfile(item_path):

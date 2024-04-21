@@ -49,7 +49,8 @@ class UploadProjectAPI(Resource):
                 "project_id": str(project_id)
             }
             return result, 200
-        except:
+        except Exception as ex:
+            print(ex)
             return "There was some issue with your request", 400
     def patch(self):
         try:
@@ -59,7 +60,7 @@ class UploadProjectAPI(Resource):
             # PERFORM DELETION OF LOCALSTORAGE
             remove_folder_contents_and_folder(f"{ROOT_DIR}/LOCALSTORAGE/{args['project_name']}")
             return {"Status": "Successful deletion"}, 200
-        except:
+        except Exception as ex:
             return "There was some issue with your request", 400
         
 class UploadDataAPI(Resource):
