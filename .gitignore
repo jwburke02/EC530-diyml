@@ -6,3 +6,4 @@ test.py
 .pytest_cache
 yolov8m.pt
 .DS_Store
+newvenv
