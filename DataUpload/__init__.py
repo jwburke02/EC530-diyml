@@ -40,6 +40,8 @@ class UploadProjectAPI(Resource):
         try:
             parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('project_type', help="Project type cannot be blank...", required=True).add_argument('api_token', help="API token cannot be blank...", required=True)
             args = parser.parse_args()
+            if DatabaseAccess.projectExists(args['project_name']):
+                return "A project with that name already exists.", 400
             project_id = DatabaseAccess.createProject(args['project_name'], args['project_type'], args['api_token'])
             result = {
                 "project_name": args['project_name'],

@@ -152,6 +152,14 @@ def loginUser(username, password):
 # PROJECT #
 ###########
 '''
+PROJECT EXISTS
+'''
+def projectExists(project_name):
+    if (project_name.find_one({"project_name": project_name})):
+        return True
+    else:
+        return False
+'''
 PROJECT CREATION
 '''
 def createProject(project_name, project_type, api_token):
