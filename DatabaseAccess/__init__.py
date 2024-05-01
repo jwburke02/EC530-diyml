@@ -39,7 +39,7 @@ def projectCollection(DB):
                             "project_name": {"bsonType": "string"},
                             "project_type": {"bsonType": "string"},
                             "current_url": {"bsonType": "string"},
-                            "is_published": {"bsonType": "bool"},
+                            "is_published": {"bsonType": "string"},
                             "classes": {
                                 "bsonType": "array",
                                 "items": {"bsonType": "string"}
@@ -175,7 +175,7 @@ def createProject(project_name, project_type, api_token):
             "project_name": project_name,
             "project_type": project_type,
             "current_url": "NONE",
-            "is_published": False,
+            "is_published": "False",
             "classes": [],
             "dids": []
         }
