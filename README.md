@@ -1,6 +1,12 @@
 # EC530 - DIY Maching Learning Backend
 ## Note on Frontend
 The frontend for this can be found here: https://github.com/jwburke02/EC530-diyml-react-ui
+## Running the Project
+The backend for this project can be ran through the following means:
+1. Clone this repository.
+2. Create a virtual python environment.
+3. Download all dependencies using `pip install -r requirements.txt`.
+4. Run the application using `python3 DIYML.py`.
 ## API Descriptions and Uses
 ### Auth
 This is a module that deals with creating accounts for users of this service. Additionally, it is responsible for lending out the authorization tokens needed by the other APIs.
