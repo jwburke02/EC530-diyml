@@ -22,7 +22,7 @@ class UploadProjectAPI(Resource):
         try:
             parser = reqparse.RequestParser().add_argument('project_name', help="Project name cannot be blank...", required=True).add_argument('api_token', help="API Token cannot be blank...", required=True)
             args = parser.parse_args()
-            result = DatabaseAccess.getProjectInfo(args['project_name'], args['api_token'])
+            result = DatabaseAccess.getProjectInfo(args['project_name'])
             if (result):
                 result['_id'] = str(result['_id'])
                 result['uid'] = str(result['uid'])

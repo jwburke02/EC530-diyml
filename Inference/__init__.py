@@ -14,9 +14,8 @@ def makeInference(args):
     '''
     project_name = args['project_name']
     inference_mapping = args['inference_mapping']
-    api_token = args['api_token']
     image_data = args['image_data']
-    project = DatabaseAccess.getProjectInfo(project_name, api_token)
+    project = DatabaseAccess.getProjectInfo(project_name)
     if project['current_url'] == 'NONE' or project['is_published'] == 'False':
         return # we have nothing to infer with
     model = YOLO(project['current_url'])
@@ -43,6 +42,8 @@ def makeInference(args):
     if length == 0:
         response = ["Nothing Detected in Image"]
     stored_inferences[inference_mapping] = response
+    print("HERE IS INFERENCE RESPONSE")
+    print(response)
     return
 
 inference_queue = JovQueue(3, makeInference)
@@ -61,13 +62,12 @@ class InferenceAPI(Resource):
 
     def post(self):
         try:
-            parser = reqparse.RequestParser().add_argument('api_token', help="API Token cannot be blank...", required=True).add_argument('project_name', help="Project Name cannot be blank...", required=True).add_argument('image_data', required=True)
+            parser = reqparse.RequestParser().add_argument('project_name', help="Project Name cannot be blank...", required=True).add_argument('image_data', required=True)
             args = parser.parse_args()
             # place into queue
             arguments = {}
             arguments['project_name'] = args['project_name']
             arguments['image_data'] = args['image_data']
-            arguments['api_token'] = args['api_token']
             for i in range(100):
                 if i in stored_inferences:
                     continue

@@ -2,6 +2,16 @@ from flask_restful import Resource, reqparse
 import DatabaseAccess
 
 class AuthenticationAPI(Resource):
+    def get(self): #check if user exist
+        try:
+            parser = reqparse.RequestParser().add_argument('username', help="Username cannot be blank...", required=True, location='args')
+            args = parser.parse_args()
+            if DatabaseAccess.userExists(args['username']):
+                return True, 200
+            else:
+                return False, 200
+        except:
+            return "There was some error with your request", 400
     def post(self): # LOGIN
         try:
             parser = reqparse.RequestParser().add_argument('username', help="Username cannot be blank...", required=True).add_argument('password', help="Password cannot be blank...", required=True)

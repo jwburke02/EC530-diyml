@@ -203,11 +203,9 @@ def deleteProject(project_name, api_token):
 '''
 PROJECT DETAIL ENDPOINT
 '''
-def getProjectInfo(project_name, api_token):
-    # check if this is project associated with api_token
+def getProjectInfo(project_name):
     project = project_collection.find_one({"project_name": project_name})
-    user = user_collection.find_one({"api_token": api_token})
-    if user['_id'] == project['uid']:
+    if (project):
         # return the project
         return project
     else:
@@ -221,6 +219,17 @@ def getAllProjects(username):
     uid = user['_id']
     # use this uid to get every possible project
     projcursor = project_collection.find({"uid": uid})
+    return [item for item in projcursor]
+
+'''
+GET ALL PROJECT INFOS PUBLISHED
+'''
+def getAllProjectsPublished(username):
+    # get uid from user_name
+    user = user_collection.find_one({"username": username})
+    uid = user['_id']
+    # use this uid to get every possible project
+    projcursor = project_collection.find({"uid": uid, "is_published": "True"})
     return [item for item in projcursor]
 
 '''

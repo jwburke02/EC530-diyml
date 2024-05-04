@@ -23,7 +23,7 @@ def setUpFileSystem(project_name, train_split, api_token):
         os.makedirs(train_project_location + '/valid/images')
         os.makedirs(train_project_location + '/valid/labels')
         os.makedirs(train_project_location + '/output')
-    project_into = DatabaseAccess.getProjectInfo(project_name, api_token)
+    project_into = DatabaseAccess.getProjectInfo(project_name)
     dids = project_into['dids']
     if train_split < .5 or train_split > 1:
         train_split = .8
