@@ -6,7 +6,13 @@ The backend for this project can be ran through the following means:
 1. Clone this repository.
 2. Create a virtual python environment.
 3. Download all dependencies using `pip install -r requirements.txt`.
-4. Run the application using `python3 DIYML.py`.
+4. Run the application using `python3 DIYML.py`.  
+The backend can also be installed as a python package. https://test.pypi.org/project/DIYML/0.0.1/ is where this is hosted (on test pypi).  
+In order to run the application using the package:
+1. Ensure all requirements in requirements.txt are installed in your environment.
+2. Ensure DIYML is downloaded: pip install -i https://test.pypi.org/simple/ DIYML==0.0.1
+3. Run `DIYML` by importing `app` from `DIYML` and doing `app.run(host='0.0.0.0', port=7001)`
+4. Ensure the `utils.py` folder is present when running this module. It is found in the backend repo here.
 ## API Descriptions and Uses
 ### Auth
 This is a module that deals with creating accounts for users of this service. Additionally, it is responsible for lending out the authorization tokens needed by the other APIs.
