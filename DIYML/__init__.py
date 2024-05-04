@@ -22,7 +22,3 @@ api.add_resource(UploadProjectAPI, '/upload/project')  # project upload (new pro
 api.add_resource(InferenceAPI, '/inference')  # API for detection or classification using a trained model
 api.add_resource(PublishAPI, '/publish')  # API for publishing a project as a model
 api.add_resource(TrainAPI, '/train')  # API for training
-
-# run on all available hosts locally on 7001
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=7001)
